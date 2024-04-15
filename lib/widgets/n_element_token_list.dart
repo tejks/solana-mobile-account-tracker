@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:solana_mobile_account_tracker/screens/token_list_screen.dart';
 
@@ -66,46 +67,22 @@ class _TokenListState extends State<TokenList> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...List.generate(widget.tokens.length > 3 ? 3 : widget.tokens.length,
-            (index) {
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(
-                widget.tokens[index].logoURI,
+        Padding(
+          padding: const EdgeInsets.only(left: 15, right: 5, top: 3, bottom: 3),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Collections',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            title: Text(
-              getFromatedName(widget.tokens[index]),
-              style: const TextStyle(fontSize: 14),
-            ),
-            subtitle: Text(
-              shortPubkey(widget.tokens[index].mint),
-              style: const TextStyle(fontSize: 11),
-            ),
-            trailing: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  getFormatedAmount(widget.tokens[index]),
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  '${getUsdAmount(widget.tokens[index], widget.tokenPrices[widget.tokens[index].mint]!)}\$',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
-        widget.tokens.length > 3
-            ? TextButton(
+              TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -117,9 +94,72 @@ class _TokenListState extends State<TokenList> {
                     ),
                   );
                 },
-                child: Text('--- Show ${widget.tokens.length} more ---'),
-              )
-            : const SizedBox(),
+                child: Row(
+                  children: [
+                    Text(
+                      'View all',
+                      style: TextStyle(color: Colors.grey[500]),
+                    ),
+                    Icon(Icons.arrow_right, color: Colors.grey[400])
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        ...List.generate(widget.tokens.length > 3 ? 3 : widget.tokens.length,
+            (index) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 15),
+            padding: const EdgeInsets.all(5),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(
+                  widget.tokens[index].logoURI,
+                ),
+              ),
+              title: Text(
+                getFromatedName(widget.tokens[index]),
+                style: const TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              subtitle: Text(
+                shortPubkey(widget.tokens[index].mint),
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+              trailing: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    getFormatedAmount(widget.tokens[index]),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    '${getUsdAmount(widget.tokens[index], widget.tokenPrices[widget.tokens[index].mint]!)}\$',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        })
       ],
     );
   }

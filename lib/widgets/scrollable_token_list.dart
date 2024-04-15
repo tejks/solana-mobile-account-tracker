@@ -69,38 +69,54 @@ class _ScrollableTokenListState extends State<ScrollableTokenList> {
       padding: const EdgeInsets.symmetric(
         horizontal: 5,
       ),
-      itemBuilder: (context, index) => ListTile(
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(
-            widget.tokens[index].logoURI,
-          ),
-        ),
-        title: Text(
-          getFromatedName(widget.tokens[index]),
-          style: const TextStyle(fontSize: 14),
-        ),
-        subtitle: Text(
-          shortPubkey(widget.tokens[index].mint),
-          style: const TextStyle(fontSize: 11),
-        ),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              getFormatedAmount(widget.tokens[index]),
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Text(
-              '${getUsdAmount(widget.tokens[index], widget.tokenPrices[widget.tokens[index].mint]!)}\$',
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
+      itemBuilder: (context, index) => Container(
+        margin: const EdgeInsets.only(bottom: 15),
+        padding: const EdgeInsets.all(5),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              offset: Offset(0, 4),
             ),
           ],
+        ),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(
+              widget.tokens[index].logoURI,
+            ),
+          ),
+          title: Text(
+            getFromatedName(widget.tokens[index]),
+            style: const TextStyle(fontSize: 16, color: Colors.black),
+          ),
+          subtitle: Text(
+            shortPubkey(widget.tokens[index].mint),
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+          trailing: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                getFormatedAmount(widget.tokens[index]),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+              Text(
+                '${getUsdAmount(widget.tokens[index], widget.tokenPrices[widget.tokens[index].mint]!)}\$',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       itemCount: widget.tokens.length,
