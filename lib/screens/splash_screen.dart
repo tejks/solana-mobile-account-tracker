@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:solana_mobile_account_tracker/cubit/accounts_cubit.dart';
 import 'package:solana_mobile_account_tracker/cubit/tokens_cubit.dart';
 import 'package:solana_mobile_account_tracker/screens/home_screen.dart';
+import 'package:solana_mobile_account_tracker/screens/onbording/onbording.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,8 +20,6 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-
-    print('Reading accounts');
     context.read<AccountsCubit>().loadAccounts();
   }
 
@@ -33,7 +32,6 @@ class _SplashScreenState extends State<SplashScreen>
           BlocListener<AccountsCubit, AccountsState>(
             listener: (context, state) {
               if (state is AccountsLoaded) {
-                print('Accounts: ${state.accounts}');
                 if (state.accounts.isNotEmpty) {
                   context.read<TokensCubit>().loadTokens(
                         state.accounts
@@ -41,6 +39,13 @@ class _SplashScreenState extends State<SplashScreen>
                             .map((e) => e.address)
                             .toList(),
                       );
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Onbording(),
+                    ),
+                  );
                 }
               }
             },
