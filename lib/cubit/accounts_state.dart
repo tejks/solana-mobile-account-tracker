@@ -26,6 +26,5 @@ final class SingleAccount extends LocalAccount {
 final class AllAccounts extends LocalAccount {
   List<LocalAccount> accounts;
 
-  AllAccounts(this.accounts)
-      : super('123231312312312312321313', '123123131231231231231331');
+  AllAccounts(this.accounts) : super('All', 'All Accounts');
 }

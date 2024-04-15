@@ -14,24 +14,17 @@ class AccountsCubit extends Cubit<AccountsState> {
     try {
       var localAccounts = await Hive.openBox<LocalAccount>('local_accounts');
 
-      await localAccounts.put(
-        "HYe3FzPcyjaJ6G1E2UydSoP7VEkQkLTL33hcpKbK51Q4",
-        SingleAccount(
-          "HYe3FzPcyjaJ6G1E2UydSoP7VEkQkLTL33hcpKbK51Q4",
-          "Wallet 1",
-        ),
-      );
+      final List<LocalAccount> accounts = [];
+      final localAccountsList = localAccounts
+          .toMap()
+          .values
+          .map((e) => SingleAccount(e.address, e.name))
+          .toList();
+      accounts.addAll(localAccountsList);
 
-      await localAccounts.put(
-        "E9UpkDwtNMz2cauZ7DEggvb2cTs7GsJXKrcq4MiTZeeY",
-        SingleAccount(
-          "E9UpkDwtNMz2cauZ7DEggvb2cTs7GsJXKrcq4MiTZeeY",
-          "Wallet 2",
-        ),
-      );
-
-      final accounts = localAccounts.toMap().values.toList();
-      accounts.add(AllAccounts(accounts));
+      if (accounts.length > 1) {
+        accounts.add(AllAccounts(accounts));
+      }
 
       emit(AccountsLoaded(accounts));
     } catch (e) {
