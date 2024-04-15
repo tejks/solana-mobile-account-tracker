@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:solana_mobile_account_tracker/cubit/accounts_cubit.dart';
 import 'package:solana_mobile_account_tracker/cubit/tokens_cubit.dart';
 import 'package:solana_mobile_account_tracker/models/local_account.dart';
@@ -17,59 +17,35 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late PageController _pageViewController;
-  late TabController _tabController;
   int _currentPageIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _pageViewController = PageController();
-    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
   void dispose() {
     super.dispose();
     _pageViewController.dispose();
-    _tabController.dispose();
   }
 
   String _getCumuativeUsd(double cumuativeUsd) =>
-      '${cumuativeUsd.toStringAsFixed(2)} \$';
+      '${cumuativeUsd.toStringAsFixed(2)} \$'.replaceFirst('.', ',');
 
   void _handlePageViewChanged(int currentPageIndex) {
-    if (!_isOnDesktopAndWeb) {
-      return;
-    }
-    _tabController.index = currentPageIndex;
     setState(() {
       _currentPageIndex = currentPageIndex;
     });
   }
 
   void _updateCurrentPageIndex(int index) {
-    _tabController.index = index;
     _pageViewController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
     );
-  }
-
-  bool get _isOnDesktopAndWeb {
-    if (kIsWeb) {
-      return true;
-    }
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.macOS:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return true;
-      case TargetPlatform.android:
-      case TargetPlatform.iOS:
-      case TargetPlatform.fuchsia:
-        return false;
-    }
   }
 
   @override
@@ -92,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   slivers: [
                     SliverAppBar(
                       centerTitle: true,
-                      backgroundColor: Colors.deepPurple,
-                      leading: const Icon(Icons.menu),
+                      backgroundColor: Colors.transparent,
+                      leading: const Icon(Icons.menu, color: Colors.black),
                       title: const Text("Solana Wallet"),
                       expandedHeight: 400,
                       flexibleSpace: FlexibleSpaceBar(
@@ -104,80 +80,70 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             final LocalAccount account = localAccounts[index];
 
                             return Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Container(
-                                  margin: const EdgeInsets.only(top: 20),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(50),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            _getCumuativeUsd(
-                                              state.getAccountTotalValueInUSD(
-                                                account,
-                                              ),
-                                            ),
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 25),
-                                          Text(
-                                            account.name,
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          GestureDetector(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey
-                                                    .withOpacity(0.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                  vertical: 5,
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      shortPubkey(
-                                                        account.address,
-                                                      ),
-                                                      style: const TextStyle(
-                                                        fontSize: 13,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 8),
-                                                    const Icon(
-                                                      Icons.copy,
-                                                      size: 13,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            onTap: () {},
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                Text(
+                                  account.name,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
                                   ),
                                 ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  _getCumuativeUsd(
+                                    state.getAccountTotalValueInUSD(
+                                      account,
+                                    ),
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 35,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                account is! AllAccounts
+                                    ? GestureDetector(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.withOpacity(0.1),
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 9,
+                                              vertical: 5,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  shortPubkey(
+                                                    account.address,
+                                                  ),
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 8),
+                                                const Icon(
+                                                  Icons.copy,
+                                                  size: 13,
+                                                  color: Colors.black,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {},
+                                      )
+                                    : const SizedBox(),
+                                // const SizedBox(height: 100),
                               ],
                             );
                           },
@@ -185,79 +151,185 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                     ),
                     SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: PageIndicator(
-                            tabController: _tabController,
-                            currentPageIndex: _currentPageIndex,
-                            onUpdateCurrentPageIndex: _updateCurrentPageIndex,
-                            isOnDesktopAndWeb: _isOnDesktopAndWeb,
-                          ),
-                        ),
+                      child: Center(
+                        child: localAccounts.length > 1
+                            ? SmoothPageIndicator(
+                                controller: _pageViewController,
+                                count: localAccounts.length,
+                                effect: ExpandingDotsEffect(
+                                  dotHeight: 6,
+                                  dotWidth: 6,
+                                  activeDotColor: Colors.green,
+                                  dotColor: Colors.grey[300]!,
+                                ),
+                              )
+                            : const SizedBox(),
                       ),
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            color: Colors.deepPurple[300],
-                            child: TokenList(
-                              tokens: state.getTokensByLocalAccount(
-                                localAccounts[_currentPageIndex],
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 10,
+                        ),
+                        child: Row(
+                          children: [
+                            IconButton(
+                              splashRadius: 16.0,
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                if (_currentPageIndex == 0) {
+                                  return;
+                                }
+                                _updateCurrentPageIndex(_currentPageIndex - 1);
+                              },
+                              icon: const Icon(
+                                Icons.arrow_left_rounded,
+                                size: 32.0,
                               ),
-                              tokenPrices: state.priceFeed,
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            color: Colors.deepPurple[300],
-                            height: 350,
-                            child: CircularChart(
-                              tokens: state.getTokensByLocalAccount(
-                                localAccounts[_currentPageIndex],
+                            IconButton(
+                              splashRadius: 16.0,
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                if (_currentPageIndex == 2) {
+                                  return;
+                                }
+                                _updateCurrentPageIndex(_currentPageIndex + 1);
+                              },
+                              icon: const Icon(
+                                Icons.arrow_right_rounded,
+                                size: 32.0,
                               ),
-                              tokenPrices: state.priceFeed,
                             ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 10,
+                        ),
+                        child: TokenList(
+                          tokens: state.getTokensByLocalAccount(
+                            localAccounts[_currentPageIndex],
                           ),
+                          tokenPrices: state.priceFeed,
                         ),
                       ),
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            color: Colors.deepPurple[300],
-                            height: 200,
-                          ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 20,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 15,
+                                right: 5,
+                                top: 3,
+                                bottom: 7,
+                              ),
+                              child: Text(
+                                'Statistics',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: state
+                                      .getStableTokensByLocalAccount(
+                                        localAccounts[_currentPageIndex],
+                                      )
+                                      .isNotEmpty
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        CircularChart(
+                                          tokens: state.getTokensByLocalAccount(
+                                            localAccounts[_currentPageIndex],
+                                          ),
+                                          tokenPrices: state.priceFeed,
+                                        ),
+                                        CircularChart(
+                                          tokens: state
+                                              .getStableTokensByLocalAccount(
+                                            localAccounts[_currentPageIndex],
+                                          ),
+                                          tokenPrices: state.priceFeed,
+                                        ),
+                                      ],
+                                    )
+                                  : Center(
+                                      child: CircularChart(
+                                        tokens: state.getTokensByLocalAccount(
+                                          localAccounts[_currentPageIndex],
+                                        ),
+                                        tokenPrices: state.priceFeed,
+                                      ),
+                                    ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            color: Colors.deepPurple[300],
-                            height: 200,
-                          ),
-                        ),
-                      ),
-                    ),
+                    // SliverToBoxAdapter(
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(
+                    //       horizontal: 30,
+                    //       vertical: 20,
+                    //     ),
+                    //     child: Container(
+                    //       height: 200,
+                    //       decoration: const BoxDecoration(
+                    //         borderRadius: BorderRadius.all(Radius.circular(20)),
+                    //         color: Colors.white,
+                    //         boxShadow: [
+                    //           BoxShadow(
+                    //             color: Colors.black12,
+                    //             blurRadius: 10,
+                    //             offset: Offset(0, 4),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // SliverToBoxAdapter(
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(16.0),
+                    //     child: ClipRRect(
+                    //       borderRadius: BorderRadius.circular(20),
+                    //       child: Container(
+                    //         color: Colors.deepPurple[300],
+                    //         height: 200,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 );
               }
@@ -266,71 +338,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             },
           ),
         ),
-      ),
-    );
-  }
-}
-
-class PageIndicator extends StatelessWidget {
-  const PageIndicator({
-    super.key,
-    required this.tabController,
-    required this.currentPageIndex,
-    required this.onUpdateCurrentPageIndex,
-    required this.isOnDesktopAndWeb,
-  });
-
-  final int currentPageIndex;
-  final TabController tabController;
-  final void Function(int) onUpdateCurrentPageIndex;
-  final bool isOnDesktopAndWeb;
-
-  @override
-  Widget build(BuildContext context) {
-    if (!isOnDesktopAndWeb) {
-      return const SizedBox.shrink();
-    }
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          IconButton(
-            splashRadius: 16.0,
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              if (currentPageIndex == 0) {
-                return;
-              }
-              onUpdateCurrentPageIndex(currentPageIndex - 1);
-            },
-            icon: const Icon(
-              Icons.arrow_left_rounded,
-              size: 32.0,
-            ),
-          ),
-          TabPageSelector(
-            controller: tabController,
-            color: colorScheme.background,
-            selectedColor: colorScheme.primary,
-          ),
-          IconButton(
-            splashRadius: 16.0,
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              if (currentPageIndex == 2) {
-                return;
-              }
-              onUpdateCurrentPageIndex(currentPageIndex + 1);
-            },
-            icon: const Icon(
-              Icons.arrow_right_rounded,
-              size: 32.0,
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -13,9 +13,18 @@ class TokenListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Widget'),
+        title: Text(
+          'Collection',
+          style: TextStyle(color: Colors.grey[500]),
+        ),
+        backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(color: Colors.grey[500]),
       ),
-      body: ScrollableTokenList(tokens: tokens, tokenPrices: tokenPrices),
+      backgroundColor: Colors.green[50],
+      body: Container(
+        padding: const EdgeInsets.all(20),
+        child: ScrollableTokenList(tokens: tokens, tokenPrices: tokenPrices),
+      ),
     );
   }
 }

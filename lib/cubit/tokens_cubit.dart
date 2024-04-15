@@ -125,9 +125,6 @@ class TokensCubit extends Cubit<TokensState> {
     try {
       final tokenAccounts = await Future.wait(tokenAccountFuture);
 
-      print(tokenAccounts.length);
-      print(tokenPrices.length);
-
       for (var i = 0; i < tokenAccounts.length; i++) {
         tokens[accounts[i]] = tokenAccounts[i];
       }

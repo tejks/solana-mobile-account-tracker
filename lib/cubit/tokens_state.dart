@@ -41,6 +41,20 @@ final class TokensLoaded extends TokensState {
     }
   }
 
+  List<Token> getStableTokensByLocalAccount(LocalAccount account) {
+    final tokens = getTokensByLocalAccount(account);
+    final List<Token> stableCoins = [];
+    for (var token in tokens) {
+      if (token.symbol == 'USDC' ||
+          token.symbol == 'USDT' ||
+          token.symbol == 'DAI' ||
+          token.symbol == 'BUSD') {
+        stableCoins.add(token);
+      }
+    }
+    return stableCoins;
+  }
+
   double getAccountTotalValueInUSD(LocalAccount account) {
     if (account is SingleAccount) {
       return getSingleAccountTotalValueInUSD(account);

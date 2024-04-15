@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:solana_mobile_account_tracker/models/token.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+final colors = [
+  Colors.green[400],
+  Colors.green[300],
+  Colors.green[200],
+  Colors.green[100],
+];
+
+final colors2 = [
+  Colors.blue[400],
+  Colors.green[300],
+  Colors.red[200],
+];
+
 class CircularChart extends StatelessWidget {
   const CircularChart(
       {super.key, required this.tokens, required this.tokenPrices});
@@ -24,7 +37,7 @@ class CircularChart extends StatelessWidget {
       if (data / sum < 0.05) {
         otherAmount += data;
       } else {
-        chartData.add(_PieData(token.name, data, token.name));
+        chartData.add(_PieData(token.symbol, data, token.symbol));
       }
     }
 
@@ -38,22 +51,28 @@ class CircularChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SfCircularChart(
-        legend: const Legend(isVisible: true, toggleSeriesVisibility: true),
-        series: <PieSeries<_PieData, String>>[
-          PieSeries<_PieData, String>(
-            animationDuration: 400,
-            dataSource: getChartData(),
-            xValueMapper: (_PieData data, _) => data.xData,
-            yValueMapper: (_PieData data, _) => data.yData,
-            dataLabelMapper: (_PieData data, _) => data.text,
-            legendIconType: LegendIconType.seriesType,
-            dataLabelSettings: const DataLabelSettings(
-              isVisible: true,
+      child: Container(
+        height: 200,
+        width: 200,
+        child: SfCircularChart(
+          margin: const EdgeInsets.all(0),
+          series: <PieSeries<_PieData, String>>[
+            PieSeries<_PieData, String>(
+              animationDuration: 400,
+              dataSource: getChartData(),
+              xValueMapper: (_PieData data, _) => data.xData,
+              yValueMapper: (_PieData data, _) => data.yData,
+              dataLabelMapper: (_PieData data, _) => data.text,
+              legendIconType: LegendIconType.seriesType,
+              dataLabelSettings: const DataLabelSettings(
+                isVisible: true,
+              ),
+              pointColorMapper: (_PieData data, index) {
+                return colors2[index];
+              },
             ),
-            // opacity: 0.7,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
