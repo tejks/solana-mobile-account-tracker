@@ -99,7 +99,7 @@ class TokensCubit extends Cubit<TokensState> {
           .map(
         (e) async {
           return http.get(
-            Uri.parse('https://price.jup.ag/v4/price?ids=${e.mint}'),
+            Uri.parse('https://price.jup.ag/v6/price?ids=${e.mint}'),
           );
         },
       );
