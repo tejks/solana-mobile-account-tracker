@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:solana_mobile_account_tracker/screens/onbording/add_account_screen.dart';
 import 'package:solana_mobile_account_tracker/screens/onbording/welcome_screen.dart';
+import 'package:solana_mobile_account_tracker/screens/splash_screen.dart';
 
 class OnboardingItems {
   List items = [
@@ -19,62 +20,111 @@ class Onbording extends StatefulWidget {
 
 class _OnbordingState extends State<Onbording> {
   final controller = OnboardingItems();
-  final pageController = PageController();
+  final _pageController = PageController();
+  int currentPage = 0;
 
-  bool isLastPage = false;
+  get onPressed => null;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[50],
-      bottomSheet: Container(
-        color: Colors.green[50],
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            //Skip Button
-            TextButton(
-                onPressed: () =>
-                    pageController.jumpToPage(controller.items.length - 1),
-                child: const Text("Skip")),
-
-            //Indicator
-            SmoothPageIndicator(
-              controller: pageController,
-              count: controller.items.length,
-              onDotClicked: (index) => pageController.animateToPage(index,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOut),
-              effect: const WormEffect(
-                dotHeight: 12,
-                dotWidth: 12,
-                activeDotColor: Color.fromARGB(255, 206, 63, 63),
+      backgroundColor: const Color.fromARGB(255, 221, 221, 221),
+      body: SafeArea(
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 6,
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: controller.items.length,
+                  itemBuilder: (context, index) {
+                    return controller.items[index];
+                  },
+                ),
               ),
-            ),
-
-            //Next Button
-            TextButton(
-              onPressed: () => pageController.nextPage(
-                duration: const Duration(milliseconds: 600),
-                curve: Curves.easeIn,
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                currentPage -= 1;
+                              });
+                              _pageController.previousPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeIn,
+                              );
+                            },
+                            child: Text(
+                              'BACK',
+                              style: TextStyle(
+                                color: currentPage == 0
+                                    ? const Color.fromARGB(0, 84, 77, 88)
+                                    : const Color.fromARGB(255, 84, 77, 88),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          SmoothPageIndicator(
+                            controller: _pageController,
+                            count: controller.items.length,
+                            effect: const ExpandingDotsEffect(
+                              dotColor: Color.fromARGB(255, 78, 81, 83),
+                              activeDotColor: Color.fromARGB(255, 112, 37, 161),
+                              dotHeight: 7,
+                              dotWidth: 7,
+                              spacing: 8,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              if (currentPage + 1 >
+                                  controller.items.length - 1) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SplashScreen(),
+                                  ),
+                                );
+                              } else {
+                                setState(() {
+                                  currentPage += 1;
+                                });
+                                _pageController.nextPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn,
+                                );
+                              }
+                            },
+                            child: const Text(
+                              'NEXT',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 109, 73, 133),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: const Text("Next"),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      body: PageView.builder(
-        controller: pageController,
-        itemCount: controller.items.length,
-        itemBuilder: (context, index) {
-          return controller.items[index];
-        },
-        onPageChanged: (index) {
-          setState(() {
-            isLastPage = index == controller.items.length - 1;
-          });
-        },
       ),
     );
   }

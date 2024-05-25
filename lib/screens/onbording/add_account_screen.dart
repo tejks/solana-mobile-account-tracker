@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:solana_mobile_account_tracker/cubit/accounts_cubit.dart';
-import 'package:solana_mobile_account_tracker/screens/splash_screen.dart';
+import 'package:solana_mobile_account_tracker/widgets/text_input.dart';
 
 class AddAccountScreen extends StatefulWidget {
   const AddAccountScreen({super.key});
@@ -16,35 +14,28 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.green[50],
-      body: Center(
+    return Padding(
+      padding: const EdgeInsets.all(40.0),
+      child: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Add Account"),
-            TextField(
-              controller: addressController,
-              decoration: const InputDecoration(
-                hintText: "Enter Address",
-              ),
+            const Icon(
+              Icons.diamond,
+              size: 100,
+              color: Color.fromARGB(255, 112, 37, 161),
             ),
-            TextField(
+            const SizedBox(height: 40),
+            const Text("Import your wallet", style: TextStyle(fontSize: 16)),
+            const SizedBox(height: 30),
+            TextInput(
+              hintText: "Wallet name",
               controller: nameController,
-              decoration: const InputDecoration(
-                hintText: "Enter Name",
-              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                context.read<AccountsCubit>().addAccount(
-                    SingleAccount(addressController.text, nameController.text));
-
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SplashScreen()));
-              },
-              child: const Text("Add"),
+            const SizedBox(height: 25),
+            TextInput(
+              hintText: "Wallet address",
+              controller: addressController,
             ),
           ],
         ),
@@ -52,3 +43,6 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
     );
   }
 }
+
+// context.read<AccountsCubit>().addAccount(
+//         SingleAccount(addressController.text, nameController.text));
