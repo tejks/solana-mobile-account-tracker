@@ -5,6 +5,7 @@ import 'package:solana_mobile_account_tracker/cubit/accounts_cubit.dart';
 import 'package:solana_mobile_account_tracker/cubit/tokens_cubit.dart';
 import 'package:solana_mobile_account_tracker/screens/home_screen.dart';
 import 'package:solana_mobile_account_tracker/screens/onbording/onbording.dart';
+import 'package:solana_mobile_account_tracker/widgets/gradient_text.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,11 +27,11 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[50],
+      backgroundColor: const Color.fromARGB(255, 221, 221, 221),
       body: MultiBlocListener(
         listeners: [
           BlocListener<AccountsCubit, AccountsState>(
-            listener: (context, state) {
+            listener: (context, state) async {
               if (state is AccountsLoaded) {
                 if (state.accounts.isNotEmpty) {
                   context.read<TokensCubit>().loadTokens(
@@ -40,7 +41,10 @@ class _SplashScreenState extends State<SplashScreen>
                             .toList(),
                       );
                 } else {
+                  await Future.delayed(const Duration(seconds: 2));
+
                   Navigator.pushReplacement(
+                    // ignore: use_build_context_synchronously
                     context,
                     MaterialPageRoute(
                       builder: (context) => const Onbording(),
@@ -63,17 +67,24 @@ class _SplashScreenState extends State<SplashScreen>
             },
           ),
         ],
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Welcome to Solana Wallet",
+              GradientText(
+                'ST',
                 style: TextStyle(
-                  color: Colors.grey[900],
-                  fontSize: 30,
+                  fontSize: 190,
+                  fontWeight: FontWeight.w500,
+                ),
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 134, 71, 177),
+                    Color.fromARGB(255, 72, 19, 107),
+                  ],
                 ),
               ),
+              SizedBox(height: 125),
             ],
           ),
         ),
