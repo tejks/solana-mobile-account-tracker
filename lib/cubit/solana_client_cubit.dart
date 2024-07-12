@@ -12,10 +12,8 @@ class SolanaClientCubit extends Cubit<SolanaClientState> {
 
     try {
       SolanaClient client = SolanaClient(
-        rpcUrl: Uri.parse(
-            'https://solana-mainnet.g.alchemy.com/v2/GRf-D3bG_ZWIMT7vtkdjLuYSfKQUKNKE'),
-        websocketUrl: Uri.parse(
-            'wss://solana-mainnet.g.alchemy.com/v2/GRf-D3bG_ZWIMT7vtkdjLuYSfKQUKNKE'),
+        rpcUrl: Uri.parse(''),
+        websocketUrl: Uri.parse(''),
       );
 
       emit(SolanaClientLoaded(client));

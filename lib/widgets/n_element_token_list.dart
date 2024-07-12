@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:solana_mobile_account_tracker/screens/token_list_screen.dart';
 
@@ -37,6 +36,8 @@ class _TokenListState extends State<TokenList> {
       return '${(result / 1000000000).toStringAsFixed(2)}B';
     } else if (result >= 1000000) {
       return '${(result / 1000000).toStringAsFixed(2)}M';
+    } else if (result >= 1) {
+      return result.toStringAsFixed(2);
     } else {
       return result.toStringAsFixed(6);
     }
@@ -78,7 +79,7 @@ class _TokenListState extends State<TokenList> {
                 'Collections',
                 style: TextStyle(
                   color: Colors.grey[600],
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -98,7 +99,7 @@ class _TokenListState extends State<TokenList> {
                   children: [
                     Text(
                       'View all',
-                      style: TextStyle(color: Colors.grey[500]),
+                      style: TextStyle(color: Colors.grey[500], fontSize: 12),
                     ),
                     Icon(Icons.arrow_right, color: Colors.grey[400])
                   ],
@@ -111,7 +112,6 @@ class _TokenListState extends State<TokenList> {
             (index) {
           return Container(
             margin: const EdgeInsets.only(bottom: 15),
-            padding: const EdgeInsets.all(5),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(20)),
               color: Colors.white,
@@ -131,7 +131,7 @@ class _TokenListState extends State<TokenList> {
               ),
               title: Text(
                 getFromatedName(widget.tokens[index]),
-                style: const TextStyle(fontSize: 16, color: Colors.black),
+                style: const TextStyle(fontSize: 14, color: Colors.black),
               ),
               subtitle: Text(
                 shortPubkey(widget.tokens[index].mint),
@@ -139,11 +139,12 @@ class _TokenListState extends State<TokenList> {
               ),
               trailing: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     getFormatedAmount(widget.tokens[index]),
                     style: const TextStyle(
-                      fontSize: 15,
+                      fontSize: 13,
                       fontWeight: FontWeight.w500,
                       color: Colors.black,
                     ),

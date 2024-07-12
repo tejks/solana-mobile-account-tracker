@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:solana_mobile_account_tracker/cubit/accounts_cubit.dart';
+import 'package:solana_mobile_account_tracker/screens/splash_screen.dart';
 import 'package:solana_mobile_account_tracker/widgets/text_input.dart';
 
 class AddAccountScreen extends StatefulWidget {
@@ -36,6 +39,28 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
             TextInput(
               hintText: "Wallet address",
               controller: addressController,
+              obscureText: true,
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 206, 205, 205),
+              ),
+              onPressed: () {
+                context.read<AccountsCubit>().addAccount(
+                      SingleAccount(
+                        addressController.text,
+                        nameController.text,
+                      ),
+                    );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SplashScreen(),
+                  ),
+                );
+              },
+              child: const Text("Import wallet"),
             ),
           ],
         ),

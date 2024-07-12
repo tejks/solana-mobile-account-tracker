@@ -14,13 +14,13 @@ class TokenListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Collection',
-          style: TextStyle(color: Colors.grey[500]),
+          'Collections',
+          style: TextStyle(color: Colors.grey[700]),
         ),
         backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(color: Colors.grey[500]),
+        iconTheme: IconThemeData(color: Colors.grey[700]),
       ),
-      backgroundColor: Colors.green[50],
+      backgroundColor: const Color.fromARGB(255, 238, 238, 238),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: ScrollableTokenList(tokens: tokens, tokenPrices: tokenPrices),

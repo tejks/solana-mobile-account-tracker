@@ -89,28 +89,20 @@ class _OnbordingState extends State<Onbording> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              if (currentPage + 1 >
-                                  controller.items.length - 1) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const SplashScreen(),
-                                  ),
-                                );
-                              } else {
-                                setState(() {
-                                  currentPage += 1;
-                                });
-                                _pageController.nextPage(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeIn,
-                                );
-                              }
+                              setState(() {
+                                currentPage += 1;
+                              });
+                              _pageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeIn,
+                              );
                             },
-                            child: const Text(
+                            child: Text(
                               'NEXT',
                               style: TextStyle(
-                                color: Color.fromARGB(255, 109, 73, 133),
+                                color: currentPage > 0
+                                    ? const Color.fromARGB(0, 109, 73, 133)
+                                    : const Color.fromARGB(255, 109, 73, 133),
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                               ),

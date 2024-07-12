@@ -29,10 +29,8 @@ class TokensCubit extends Cubit<TokensState> {
         tokensMetadataMap.map((e) => TokenMetadata.fromJson(e)).toList();
 
     final client = SolanaClient(
-      rpcUrl: Uri.parse(
-          "https://solana-mainnet.g.alchemy.com/v2/GRf-D3bG_ZWIMT7vtkdjLuYSfKQUKNKE"),
-      websocketUrl: Uri.parse(
-          "https://solana-mainnet.g.alchemy.com/v2/GRf-D3bG_ZWIMT7vtkdjLuYSfKQUKNKE"),
+      rpcUrl: Uri.parse(""),
+      websocketUrl: Uri.parse(""),
     );
 
     Map<String, List<Token>> tokens = {};
@@ -55,8 +53,6 @@ class TokensCubit extends Cubit<TokensState> {
         amountWithDecimals: solBalance / pow(10, tokensMetadata[0].decimals),
       ));
 
-      print('Reading token accounts for $accountPubkey');
-
       final tokenAccounts = await client.rpcClient
           .getTokenAccountsByOwner(
             accountPubkey,
@@ -64,8 +60,6 @@ class TokensCubit extends Cubit<TokensState> {
             encoding: Encoding.base64,
           )
           .value;
-
-      print('Token accounts: ${tokenAccounts.length}');
 
       for (var account in tokenAccounts) {
         final tokenAccountBytes = account.account.data as BinaryAccountData;
@@ -92,8 +86,6 @@ class TokensCubit extends Cubit<TokensState> {
         ));
       }
 
-      print('Tokens: ${tokensResult.length}');
-
       final priceFeedResponse = tokensResult
           .where((element) => tokenPrices[element.mint] == null)
           .map(
@@ -105,8 +97,6 @@ class TokensCubit extends Cubit<TokensState> {
       );
 
       final priceFeed = await Future.wait(priceFeedResponse);
-
-      print('Price feed: ${priceFeed.length}');
 
       for (var i = 0; i < priceFeed.length; i++) {
         final response = priceFeed[i];

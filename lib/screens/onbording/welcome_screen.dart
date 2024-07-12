@@ -26,7 +26,7 @@ class WelcomeScreen extends StatelessWidget {
           Text(
             'Welcome to Solana Tracker',
             style: TextStyle(
-              color: Color.fromARGB(255, 156, 156, 156),
+              color: Color.fromARGB(255, 83, 83, 83),
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),

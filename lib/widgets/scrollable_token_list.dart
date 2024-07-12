@@ -71,7 +71,6 @@ class _ScrollableTokenListState extends State<ScrollableTokenList> {
       ),
       itemBuilder: (context, index) => Container(
         margin: const EdgeInsets.only(bottom: 15),
-        padding: const EdgeInsets.all(5),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
           color: Colors.white,
@@ -91,7 +90,7 @@ class _ScrollableTokenListState extends State<ScrollableTokenList> {
           ),
           title: Text(
             getFromatedName(widget.tokens[index]),
-            style: const TextStyle(fontSize: 16, color: Colors.black),
+            style: const TextStyle(fontSize: 14, color: Colors.black),
           ),
           subtitle: Text(
             shortPubkey(widget.tokens[index].mint),
@@ -99,11 +98,12 @@ class _ScrollableTokenListState extends State<ScrollableTokenList> {
           ),
           trailing: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 getFormatedAmount(widget.tokens[index]),
                 style: const TextStyle(
-                  fontSize: 15,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
                 ),
