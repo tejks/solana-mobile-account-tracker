@@ -50,7 +50,7 @@ You need the following installed to build and run this project locally:
 Clone the repository and fetch dependencies:
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/tejks/solana-mobile-account-tracker
 cd solana-mobile-account-tracker
 flutter pub get
 ```
