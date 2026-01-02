@@ -1,136 +1,104 @@
-# Solana Mobile Account Tracker
+<div align="center">
+	<img src="assets/logo/phone.svg" alt="phone icon" width="150" height="150" />
 
-Professional account tracker for Solana wallets — Flutter app for inspecting local accounts, tokens, and basic token metadata.
+  <h2 align="center">Solana Mobile Account Tracker</h2>
+</div>
 
-**Status:** Draft · Local development ready
+</br>
 
-**Highlights**
+This repository contains a lightweight Flutter application for inspecting local Solana accounts, token balances, and token metadata. It's designed as a developer-friendly utility and a starting point for building wallet-inspection tools.
 
-- Lightweight Flutter UI to manage and inspect Solana accounts and token balances
-- Includes token metadata and presentation utilities
-- Ready for CI and contribution (see files in `.github/`)
+## Table of Contents
 
-**Repository layout (important files)**
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Technologies Used](#technologies-used)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Running the App](#running-the-app)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
-- `lib/` — main application code and cubits
-- `assets/` — static files (e.g., `tokens.json`)
-- `android/`, `ios/`, `linux/`, `macos/`, `windows/`, `web/` — platform build projects
-- `test/` — basic widget tests
+## Overview
 
-**Preview**
-Add a screenshot or short demo GIF here to showcase the app UI (place images in `assets/` and reference them below).
+The Solana Mobile Account Tracker is a platform-adaptive Flutter app that reads and displays local Solana accounts and token holdings. It provides quick inspection capabilities for token metadata (name, symbol, decimals) and exposes a small set of utilities used throughout the UI.
 
----
+## Key Features
 
-**Table of contents**
+1. Account listing and quick balance overview
+2. Token metadata inspection and simple presentation utilities
+3. Cubit-based state management for predictable UI state
+4. Cross-platform support: Android, iOS, Linux, macOS, Windows, Web
 
-- Purpose
-- Features
-- Quick Start
-- Development
-- Testing & CI
-- Project structure
-- Contributing
-- License
+## Technologies Used
 
----
+- Flutter & Dart
+- Cubit (Bloc family) for state management
+- Platform build targets: Android, iOS, Linux, macOS, Windows, Web
+- JSON token catalog in `assets/tokens.json`
 
-**Purpose**
+## Prerequisites
 
-This project is a focused mobile/desktop Flutter application to help users track local Solana accounts and tokens — useful as a lightweight wallet inspector and developer reference for token metadata and account balances.
+You need the following installed to build and run this project locally:
 
-**Features**
+- Flutter (stable channel). See https://docs.flutter.dev/get-started/install
+- Platform toolchains for your target(s) (Android SDK, Xcode for iOS/macOS, etc.)
 
-- View local accounts and token holdings
-- Token metadata inspection (name, symbol, decimals)
-- Simple, responsive Flutter UI with cubit-based state management
+## Installation
 
----
-
-**Quick Start (for developers)**
-
-Prerequisites
-
-- Install Flutter (stable channel). See: https://docs.flutter.dev/get-started/install
-- Ensure platform toolchains are installed for your target (Android, iOS, Linux, macOS, Windows)
-
-Clone
+Clone the repository and fetch dependencies:
 
 ```bash
 git clone <your-repo-url>
 cd solana-mobile-account-tracker
-```
-
-Install dependencies
-
-```bash
 flutter pub get
 ```
 
-Run on device / emulator
+## Running the App
+
+Run the app on your connected device or emulator:
 
 ```bash
 flutter run
 ```
 
-Build (example, Android)
+Build examples:
 
 ```bash
+# Android release APK
 flutter build apk --release
+
+# Web
+flutter build web
 ```
 
----
+## Project Structure
 
-**Development**
+- `lib/` — application source code (models, cubits, screens, widgets)
+- `assets/tokens.json` — token metadata used by the app
+- `android/`, `ios/`, `linux/`, `macos/`, `windows/`, `web/` — platform-specific projects
+- `test/` — widget and unit tests
 
-- Code style: run `dart format .` before commits
-- Static analysis: `flutter analyze`
-- State management: cubit (see `lib/cubit/`)
-- Main entry point: `lib/main.dart`
-- Solana helpers: `lib/solana.dart`
+Main entry point: `lib/main.dart`
 
-**Common commands**
+Solana helpers and client code: `lib/solana.dart`
+
+State management: `lib/cubit/` (accounts, tokens, solana client cubits)
+
+## Contributing
+
+Contributions and issues are welcome. Please follow the guidelines in `CONTRIBUTING.md` and respect the `CODE_OF_CONDUCT.md`.
+
+Common checks before opening a PR:
 
 ```bash
-# get deps
 flutter pub get
-
-# analyze
-flutter analyze
-
-# run tests
-flutter test
-
-# format
 dart format .
+flutter analyze
+flutter test
 ```
 
----
+## License
 
-**Testing & CI**
-
-This repository includes a basic GitHub Actions workflow to run `flutter pub get`, `flutter analyze`, and `flutter test` on push and pull requests. See `.github/workflows/flutter.yml`.
-
----
-
-**Project structure**
-
-- `lib/` — application source (models, cubits, screens, widgets)
-- `assets/tokens.json` — token list used by the app
-- `test/` — widget tests
-
----
-
-**Contributing**
-
-Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and follow the included templates for issues and pull requests.
-
----
-
-**License**
-
-This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-If you'd like, I can add a polished demo screenshot and update the repository badges (CI, license, pub.dev) once you provide the repo URL and optional screenshots.
+This project is licensed under the MIT License — see `LICENSE` for details.
